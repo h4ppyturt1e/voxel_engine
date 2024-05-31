@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# vcpkg package manager
+vcpkg/
+
+# Visual Studio Code
+.vscode/

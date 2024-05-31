@@ -16,6 +16,12 @@ include_directories(
 # Add source files
 file(GLOB SOURCES "src/*.cpp" "src/glad/glad.c")
 
+# Add shaders as a custom target to ensure they are copied to the build directory
+file(GLOB SHADERS "shaders/*.glsl")
+foreach(SHADER ${SHADERS})
+    configure_file(${SHADER} ${CMAKE_BINARY_DIR}/shaders COPYONLY)
+endforeach()
+
 # Find and link GLFW and GLEW
 find_package(glfw3 3.3 REQUIRED)
 find_package(GLEW REQUIRED)

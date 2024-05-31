@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/src/glad/glad.c" "CMakeFiles/VoxelGameEngine.dir/src/glad/glad.c.o" "gcc" "CMakeFiles/VoxelGameEngine.dir/src/glad/glad.c.o.d"
   "/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/src/main.cpp" "CMakeFiles/VoxelGameEngine.dir/src/main.cpp.o" "gcc" "CMakeFiles/VoxelGameEngine.dir/src/main.cpp.o.d"
+  "/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/src/shader_utils.cpp" "CMakeFiles/VoxelGameEngine.dir/src/shader_utils.cpp.o" "gcc" "CMakeFiles/VoxelGameEngine.dir/src/shader_utils.cpp.o.d"
   )
 
 # Targets to which this target links.

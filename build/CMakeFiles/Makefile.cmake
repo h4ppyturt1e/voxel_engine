@@ -11,6 +11,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.22.1/CMakeCCompiler.cmake"
   "CMakeFiles/3.22.1/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.22.1/CMakeSystem.cmake"
+  "../shaders/fragment_shader.glsl"
+  "../shaders/vertex_shader.glsl"
   "/usr/lib/x86_64-linux-gnu/cmake/glfw3/glfw3Config.cmake"
   "/usr/lib/x86_64-linux-gnu/cmake/glfw3/glfw3ConfigVersion.cmake"
   "/usr/lib/x86_64-linux-gnu/cmake/glfw3/glfw3Targets-none.cmake"
@@ -46,6 +48,8 @@ set(CMAKE_MAKEFILE_OUTPUTS
 
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
+  "shaders"
+  "shaders"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 
