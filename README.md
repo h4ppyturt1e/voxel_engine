@@ -14,3 +14,6 @@ I've started working on a voxel engine. I'm not sure what I'm going to do with i
 Was busy the past couple of days, but managed to get some time to work on it again today. The goal for today is to familiarize myself with OpenGL and get some basic shapes rendering. Maybe play around with some simple colors and shaders.
 - Got a rotating colored triangle rendering on the screen!
 - ![Day 2 Progress](/devlog_assets/day_2.gif)
+
+### Day 3 (2024-06-17) - Rendering a cube, camera movement.
+Been a while, super busy lately. Today I got a Block class set up and rendering a cube. Also got started on basic player camera movement and input handling.

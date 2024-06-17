@@ -1,26 +1,17 @@
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <iostream>
-#include "shader_utils.h"
-#include "objects/Block.h"
+#include "main.h"
 
 // Global variables
 const unsigned int SCR_WIDTH = 1600;
 const unsigned int SCR_HEIGHT = 900;
+unsigned int shaderProgram;
+unsigned int projectionLoc;
+unsigned int viewLoc;
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-}
+Player player(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f), SCR_WIDTH, SCR_HEIGHT);
 
-void processInput(GLFWwindow *window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-}
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow* window, float deltaTime);
+void updateProjectionMatrix(int width, int height);
 
 int main()
 {
@@ -34,7 +25,7 @@ int main()
     }
 
     // Create a GLFW window
-    GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "OpenGL Window", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "OpenGL Window", nullptr, nullptr);
     if (window == nullptr)
     {
         const char* description;
@@ -44,6 +35,8 @@ int main()
         return -1;
     }
     glfwMakeContextCurrent(window);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
     // Load OpenGL functions using GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -79,36 +72,46 @@ int main()
     std::string vertexShaderSource = readFile("../shaders/vertex_shader.glsl");
     std::string fragmentShaderSource = readFile("../shaders/fragment_shader.glsl");
 
-    unsigned int shaderProgram = createShaderProgram(vertexShaderSource.c_str(), fragmentShaderSource.c_str());
+    shaderProgram = createShaderProgram(vertexShaderSource.c_str(), fragmentShaderSource.c_str());
 
     // Use shader program
     glUseProgram(shaderProgram);
 
-    // Set up projection matrix
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-    unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
-    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    // Get the uniform locations
+    projectionLoc = glGetUniformLocation(shaderProgram, "projection");
+    viewLoc = glGetUniformLocation(shaderProgram, "view");
+    unsigned int modelLoc = glGetUniformLocation(shaderProgram, "model");
+
+    // Set up the initial projection matrix
+    updateProjectionMatrix(SCR_WIDTH, SCR_HEIGHT);
 
     // Set up view matrix
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
-    unsigned int viewLoc = glGetUniformLocation(shaderProgram, "view");
+    glm::mat4 view = player.getViewMatrix();
     glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
     // Render loop
+    float deltaTime = 0.0f;
+    float lastFrame = 0.0f;
     while (!glfwWindowShouldClose(window)) {
-        processInput(window);
+        // Per-frame time logic
+        float currentFrame = glfwGetTime();
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        processInput(window, deltaTime);
 
         // Clear the screen
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // Update view matrix
+        view = player.getViewMatrix();
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
         // Transformation
         glm::mat4 model = glm::mat4(1.0f);
         model = glm::translate(model, block.getPosition());
 
-        unsigned int modelLoc = glGetUniformLocation(shaderProgram, "model");
-
-        glUseProgram(shaderProgram);
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glBindVertexArray(VAO);
 
@@ -126,4 +129,25 @@ int main()
     glfwTerminate();
 
     return 0;
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+    updateProjectionMatrix(width, height);
+}
+
+void updateProjectionMatrix(int width, int height)
+{
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+    glUseProgram(shaderProgram);
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+}
+
+void processInput(GLFWwindow* window, float deltaTime)
+{
+    player.processInput(window, deltaTime);
+
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
 }
