@@ -17,3 +17,8 @@ Was busy the past couple of days, but managed to get some time to work on it aga
 
 ### Day 3 (2024-06-17) - Rendering a cube, camera movement.
 Been a while, super busy lately. Today I got a Block class set up and rendering a cube. Also got started on basic player camera movement and input handling.
+- Got a cube rendering on the screen!
+- Got camera movement working!
+- Got flying with WASD/Space/Shift working!
+- BONUS: added alternate shader for wireframe rendering (press P to toggle)
+- ![Day 3 Progress](/devlog_assets/day_3.gif)
