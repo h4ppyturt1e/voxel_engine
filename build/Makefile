@@ -177,6 +177,30 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/VoxelGameEngine.dir/build.make CMakeFiles/VoxelGameEngine.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/objects/Block.o: src/objects/Block.cpp.o
+.PHONY : src/objects/Block.o
+
+# target to build an object file
+src/objects/Block.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/VoxelGameEngine.dir/build.make CMakeFiles/VoxelGameEngine.dir/src/objects/Block.cpp.o
+.PHONY : src/objects/Block.cpp.o
+
+src/objects/Block.i: src/objects/Block.cpp.i
+.PHONY : src/objects/Block.i
+
+# target to preprocess a source file
+src/objects/Block.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/VoxelGameEngine.dir/build.make CMakeFiles/VoxelGameEngine.dir/src/objects/Block.cpp.i
+.PHONY : src/objects/Block.cpp.i
+
+src/objects/Block.s: src/objects/Block.cpp.s
+.PHONY : src/objects/Block.s
+
+# target to generate assembly for a file
+src/objects/Block.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/VoxelGameEngine.dir/build.make CMakeFiles/VoxelGameEngine.dir/src/objects/Block.cpp.s
+.PHONY : src/objects/Block.cpp.s
+
 src/shader_utils.o: src/shader_utils.cpp.o
 .PHONY : src/shader_utils.o
 
@@ -216,6 +240,9 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/objects/Block.o"
+	@echo "... src/objects/Block.i"
+	@echo "... src/objects/Block.s"
 	@echo "... src/shader_utils.o"
 	@echo "... src/shader_utils.i"
 	@echo "... src/shader_utils.s"

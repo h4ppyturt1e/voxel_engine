@@ -11,10 +11,11 @@ include_directories(
     include 
     /mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/vcpkg/installed/x64-linux/include
     /mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/src/glad
+    /mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/src/objects
 )
 
 # Add source files
-file(GLOB SOURCES "src/*.cpp" "src/glad/glad.c")
+file(GLOB SOURCES "src/*.cpp" "src/glad/glad.c" "src/objects/*.cpp")
 
 # Add shaders as a custom target to ensure they are copied to the build directory
 file(GLOB SHADERS "shaders/*.glsl")

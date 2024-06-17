@@ -5,13 +5,13 @@
 # compile CXX with /usr/bin/c++
 C_DEFINES = 
 
-C_INCLUDES = -I/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/include -I/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/vcpkg/installed/x64-linux/include -I/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/src/glad
+C_INCLUDES = -I/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/include -I/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/vcpkg/installed/x64-linux/include -I/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/src/glad -I/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/src/objects
 
 C_FLAGS = 
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/include -I/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/vcpkg/installed/x64-linux/include -I/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/src/glad
+CXX_INCLUDES = -I/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/include -I/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/vcpkg/installed/x64-linux/include -I/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/src/glad -I/mnt/c/Users/ASUS/Documents/GitHub/voxel_engine/src/objects
 
 CXX_FLAGS = 
 
