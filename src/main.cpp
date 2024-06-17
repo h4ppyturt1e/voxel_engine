@@ -4,8 +4,12 @@
 const unsigned int SCR_WIDTH = 1600;
 const unsigned int SCR_HEIGHT = 900;
 unsigned int shaderProgram;
+unsigned int edgeShaderProgram;
 unsigned int projectionLoc;
 unsigned int viewLoc;
+unsigned int modelLoc;
+glm::mat4 projection;
+bool useEdgeShader = false;
 
 Player player(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f), SCR_WIDTH, SCR_HEIGHT);
 
@@ -74,20 +78,24 @@ int main()
 
     shaderProgram = createShaderProgram(vertexShaderSource.c_str(), fragmentShaderSource.c_str());
 
+    std::string edgeVertexShaderSource = readFile("../shaders/edge_vertex_shader.glsl");
+    std::string edgeFragmentShaderSource = readFile("../shaders/edge_fragment_shader.glsl");
+
+    edgeShaderProgram = createShaderProgram(edgeVertexShaderSource.c_str(), edgeFragmentShaderSource.c_str());
+
     // Use shader program
     glUseProgram(shaderProgram);
 
     // Get the uniform locations
     projectionLoc = glGetUniformLocation(shaderProgram, "projection");
     viewLoc = glGetUniformLocation(shaderProgram, "view");
-    unsigned int modelLoc = glGetUniformLocation(shaderProgram, "model");
+    modelLoc = glGetUniformLocation(shaderProgram, "model");
 
     // Set up the initial projection matrix
     updateProjectionMatrix(SCR_WIDTH, SCR_HEIGHT);
 
-    // Set up view matrix
-    glm::mat4 view = player.getViewMatrix();
-    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+    // Enable depth test
+    glEnable(GL_DEPTH_TEST);
 
     // Render loop
     float deltaTime = 0.0f;
@@ -105,7 +113,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Update view matrix
-        view = player.getViewMatrix();
+        glm::mat4 view = player.getViewMatrix();
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
         // Transformation
@@ -115,7 +123,22 @@ int main()
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glBindVertexArray(VAO);
 
+        // Render the object with regular shader
+        glUseProgram(shaderProgram);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        // Render the edges if the edge shader is active
+        if (useEdgeShader) {
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear the screen again
+            glUseProgram(edgeShaderProgram);
+            glUniformMatrix4fv(glGetUniformLocation(edgeShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+            glUniformMatrix4fv(glGetUniformLocation(edgeShaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(view));
+            glUniformMatrix4fv(glGetUniformLocation(edgeShaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            glLineWidth(3.0f);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -124,6 +147,7 @@ int main()
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteProgram(shaderProgram);
+    glDeleteProgram(edgeShaderProgram);
 
     glfwDestroyWindow(window);
     glfwTerminate();
@@ -139,9 +163,11 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void updateProjectionMatrix(int width, int height)
 {
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+    projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
     glUseProgram(shaderProgram);
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    glUseProgram(edgeShaderProgram);
+    glUniformMatrix4fv(glGetUniformLocation(edgeShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 }
 
 void processInput(GLFWwindow* window, float deltaTime)
@@ -150,4 +176,13 @@ void processInput(GLFWwindow* window, float deltaTime)
 
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+
+    static bool pPressed = false;
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS && !pPressed) {
+        useEdgeShader = !useEdgeShader;
+        pPressed = true;
+    }
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE) {
+        pPressed = false;
+    }
 }
